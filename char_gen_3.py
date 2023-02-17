@@ -1,34 +1,22 @@
 import os, copy, pprint, random
 from PIL import Image
-#from itertools import permutations as permy
 
-random.seed(19960517)
+#random.seed(19960517)
 
-def permy(iterable):
-    # probably trim this down to size!
-    pool = list(iterable)
-    n = len(pool)
-    r = 2
-    if r > n:
-        return
-    indices = list(range(n)) # i
-    cycles = list(range(n,n-r, -1))
-    
-    yield list(copy.deepcopy(pool[i]) for i in indices[:r])
-    ########################
-    while n:
-        for i in reversed(range(r)):
-            cycles[i] -= 1
-            if cycles[i] == 0:
-                indices[i:] = indices[i+1:] + indices[i:i+1]
-                cycles[i] = n - i
-            else:
-                j = cycles[i]
-                indices[i], indices[-j] = indices[-j], indices[i]
-                yield list(copy.deepcopy(pool[i]) for i in indices[:r])
-                break
-        else:
-            return
+# ADD A 'NONE' value if you want it to be random!
+
+#=====================================================================
+
+desired_length = 30 # HOW MANY?
+variety = 100 # HOW DIFFERENT?
+form = 100  # HOW CHUNKY?
+culture = 5 # HOW COMPLEX MACRO?
+#gusto = 50 # HOW COMPLEX MIRCO?
+clones = 0 # HOW MANY SIMILIAR LETTERS?
+
+folder_name = "example_4"
+
+#=====================================================================
 
 def getSelection(d): # returns the amount to select for 
     counter = 0 
@@ -38,17 +26,6 @@ def getSelection(d): # returns the amount to select for
         else:
             return counter+1
             break
-
-#=====================================================================
-
-desired_length = 12 # HOW MANY?
-variety = 80 # HOW DIFFERENT?
-form = 95  # HOW CHUNKY?
-culture = 70 # HOW COMPLEX MACRO?
-gusto = 99 # HOW COMPLEX MIRCO?
-clones = 0 # HOW MANY SIMILIAR LETTERS?
-
-#=====================================================================
 
 if not variety: # if zero
     select_amount = getSelection(desired_length)
@@ -130,6 +107,32 @@ def addSelections(a):
             counter +=1
     else:
         return s
+
+def permy(iterable):
+    # probably trim this down to size!
+    pool = list(iterable)
+    n = len(pool)
+    r = 2
+    if r > n:
+        return
+    indices = list(range(n)) # i
+    cycles = list(range(n,n-r, -1))
+    
+    yield list(copy.deepcopy(pool[i]) for i in indices[:r])
+    ########################
+    while n:
+        for i in reversed(range(r)):
+            cycles[i] -= 1
+            if cycles[i] == 0:
+                indices[i:] = indices[i+1:] + indices[i:i+1]
+                cycles[i] = n - i
+            else:
+                j = cycles[i]
+                indices[i], indices[-j] = indices[-j], indices[i]
+                yield list(copy.deepcopy(pool[i]) for i in indices[:r])
+                break
+        else:
+            return
         
 select_perms = list(permy(addSelections(select_amount)))
 
@@ -148,7 +151,7 @@ def getImage(x):
 bot_coord = (0,7,7,14) # base image is 7x14 px
 
 def makeLetterImages():
-    name = "delete_me_5" #.format(random.randint(1000,9999))
+    name = folder_name #.format(random.randint(1000,9999))
     current_dir = os.getcwd()
     new_path = os.path.join(current_dir,name)
 
